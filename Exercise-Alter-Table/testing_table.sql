@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 22, 2016 at 08:05 AM
+-- Generation Time: Dec 23, 2016 at 08:12 AM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -27,11 +27,22 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `testing_table` (
+  `id` int(11) NOT NULL,
   `username` varchar(30) DEFAULT NULL,
   `roll_no` int(5) DEFAULT NULL,
   `first_name` varchar(30) DEFAULT NULL,
   `last_name` varchar(30) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `testing_table`
+--
+ALTER TABLE `testing_table`
+  ADD PRIMARY KEY (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

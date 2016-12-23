@@ -1,5 +1,11 @@
 --Create a table named "testing_table" with following fields:
-CREATE TABLE testing_table (name VARCHAR(30) , contact_name VARCHAR(30) , roll_no CHARACTER(20));
+CREATE TABLE testing_table (
+	id INT NOT NULL,
+	name VARCHAR(30) ,
+	contact_name VARCHAR(30),
+	roll_no CHARACTER(20),
+	PRIMARY KEY (id)
+	);
 
 --Delete column name
 ALTER TABLE testing_table
