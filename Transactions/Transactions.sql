@@ -37,7 +37,6 @@ WHERE bank_account_no = 97171;
 UPDATE accounts
 SET balance = balance - 500
 WHERE bank_account_no = 97171;
-COMMIT;
 
 --iii) userA is transferring 200 Rs to userB's account
 UPDATE accounts
