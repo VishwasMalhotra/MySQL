@@ -40,9 +40,11 @@ WHERE bank_account_no = 97171;
 
 --iii) userA is transferring 200 Rs to userB's account
 UPDATE accounts
-SET balance =(case when bank_account_no = 97171 then balance - 200
-when bank_account_no = 99535 then balance + 200
-end)
-WHERE bank_account_no IN (97171,99535);
+SET balance = balance - 200
+WHERE bank_account_no = 97171;
+UPDATE accounts
+SET balance = balance + 200
+WHERE bank_account_no = 99535;
+
 
 COMMIT;
