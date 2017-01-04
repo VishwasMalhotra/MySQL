@@ -54,29 +54,29 @@ Query OK, 8 rows affected (0.00 sec)
 Records: 8  Duplicates: 0  Warnings: 0
 
 -- i. Find the employee who gets the highest total commission.
-mysql> SELECT name
+mysql> SELECT name, sum(commission_amount) AS Commission
     -> FROM commissions JOIN employees
     -> ON commissions.employee_id=employees.id
     -> GROUP BY employee_id
     -> HAVING sum(commission_amount)
     -> =
-    -> (SELECT MAX(commission_sum) FROM
-    -> (SELECT (sum(commission_amount)) AS commission_sum
+    -> (SELECT DISTINCT (sum(commission_amount)) AS commission_sum
     -> FROM commissions JOIN employees
     -> ON commissions.employee_id=employees.id
-    -> GROUP BY employee_id) AS X);
-+-------------+
-| name        |
-+-------------+
-| Chris Gayle |
-+-------------+
+    -> GROUP BY employee_id ORDER BY commission_sum DESC LIMIT 1);
++-------------+------------+
+| name        | Commission |
++-------------+------------+
+| Chris Gayle |       9000 |
++-------------+------------+
 1 row in set (0.00 sec)
 
 --ii. Find employee with 4th Highest salary from employee table.
-mysql> SELECT name
+mysql>  SELECT name
+    ->  FROM employees WHERE salary =
+    -> (SELECT DISTINCT salary
     -> FROM employees
-    -> ORDER BY Salary
-    -> DESC LIMIT 3,1;
+    -> ORDER BY salary DESC limit 3,1);
 +--------------+
 | name         |
 +--------------+
@@ -85,22 +85,21 @@ mysql> SELECT name
 1 row in set (0.00 sec)
 
 --iii. Find department that is giving highest commission.
-mysql> SELECT departments.name
+mysql> SELECT department_id
     -> FROM commissions JOIN employees JOIN departments
     -> ON commissions.employee_id=employees.id && employees.department_id = departments.id
     -> GROUP BY employee_id
     -> HAVING sum(commission_amount)
     -> =
-    -> (SELECT MAX(commission_sum) FROM
-    -> (SELECT (sum(commission_amount)) AS commission_sum
+    -> (SELECT DISTINCT (sum(commission_amount)) AS commission_sum
     -> FROM commissions JOIN employees
     -> ON commissions.employee_id=employees.id
-    -> GROUP BY employee_id) AS X);
-+---------+
-| name    |
-+---------+
-| Banking |
-+---------+
+    -> GROUP BY employee_id ORDER BY commission_sum DESC LIMIT 1);
++---------------+
+| department_id |
++---------------+
+|             1 |
++---------------+
 1 row in set (0.00 sec)
 
 --iv. Find employees getting commission more than 3000
