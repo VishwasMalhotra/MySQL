@@ -86,8 +86,8 @@ mysql>  SELECT name
 
 --iii. Find department that is giving highest commission.
 mysql> SELECT department_id
-    -> FROM commissions JOIN employees JOIN departments
-    -> ON commissions.employee_id=employees.id && employees.department_id = departments.id
+    -> FROM commissions JOIN employees
+    -> ON commissions.employee_id=employees.id
     -> GROUP BY employee_id
     -> HAVING sum(commission_amount)
     -> =
