@@ -4,7 +4,7 @@ Query OK, 1 row affected (0.04 sec)
 mysql> use exercise_3
 Database changed
 
---1. Manage(create, update, delete) categories, articles, comments, and users
+--1 a. Manage(create, update, delete) categories, articles, comments, and users
 mysql> CREATE TABLE users (
     -> id INT AUTO_INCREMENT,
     -> `name` VARCHAR(30),
@@ -48,21 +48,6 @@ mysql> CREATE TABLE comments (
     -> FOREIGN KEY(article_id) REFERENCES articles(id)
     -> );
 Query OK, 0 rows affected (0.07 sec)
-
-mysql> INSERT INTO to_delete(id,test)
-    -> VALUES (1,'Hello'),
-    -> (2,'Hi');
-Query OK, 2 rows affected (0.00 sec)
-Records: 2  Duplicates: 0  Warnings: 0
-
-mysql> UPDATE to_delete
-    -> SET test = 'Hi, how are you?'
-    -> WHERE id=1;
-Query OK, 1 row affected (0.00 sec)
-Rows matched: 1  Changed: 1  Warnings: 0
-
-mysql> DROP TABLE to_delete;
-Query OK, 0 rows affected (0.02 sec)
 
 mysql> INSERT INTO users (name, type)
     -> VALUES ('Rahul', 'admin'),
@@ -125,6 +110,26 @@ mysql> INSERT INTO comments(`comment`, user_id, article_id)
 Query OK, 10 rows affected (0.00 sec)
 Records: 10  Duplicates: 0  Warnings: 0
 
+-- 1 b. Update and Delete queries.
+mysql> INSERT INTO users (name, type)
+    -> VALUES ('testingUser', 'admin');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> UPDATE users
+    -> SET users.name = 'deletingUser'
+    -> WHERE users.id = 11;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> DELETE FROM users
+    -> WHERE users.name = 'deletingUser';
+Query OK, 1 row affected (0.00 sec)
+
+-- Correction of: Lets avoid using column names which include the column's table name.
+mysql> ALTER TABLE comments CHANGE comment `text` text;
+Query OK, 0 rows affected (0.14 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
 --2 a. Select all articles whose author's name is user3.
 mysql> SELECT content, name, user_id
     -> FROM articles JOIN users
@@ -157,36 +162,38 @@ mysql> SELECT content, name, user_id
 3 rows in set (0.00 sec)
 
 --3. For all the articles being selected above, select all the articles and also the comments associated with those articles in a single query.
-mysql> SELECT content, comment AS 'Comments by User'
+mysql> SELECT content, GROUP_CONCAT(text SEPARATOR ' & ') AS 'Comments by User'
     -> FROM articles JOIN users
     -> ON articles.user_id=users.id LEFT JOIN comments
     -> ON comments.article_id=articles.id
-    -> WHERE users.name='user3';
+    -> WHERE users.name='user3'
+    -> GROUP BY articles.content;
 +---------------------+------------------+
 | content             | Comments by User |
 +---------------------+------------------+
-| John is a good boy. | Great.           |
-| John is a good boy. | Better.          |
 | Hi, how are you?    | Nice.            |
 | I am good.          | NULL             |
+| John is a good boy. | Great. & Better. |
 +---------------------+------------------+
-4 rows in set (0.00 sec)
+3 rows in set (0.00 sec)
 
 
 -- 3 b. Using subquery.
-mysql> SELECT content, comment AS 'Comments by User'
+mysql> SELECT content, GROUP_CONCAT(text SEPARATOR ' & ') AS 'Comments by User'
     -> FROM articles LEFT JOIN comments
     -> ON articles.id = comments.article_id
-    -> WHERE articles.user_id = (SELECT id FROM users WHERE name = 'user3');
+    -> WHERE articles.user_id
+    -> =
+    -> (SELECT id FROM users WHERE name = 'user3')
+    -> GROUP BY articles.content;
 +---------------------+------------------+
 | content             | Comments by User |
 +---------------------+------------------+
-| John is a good boy. | Great.           |
-| John is a good boy. | Better.          |
 | Hi, how are you?    | Nice.            |
 | I am good.          | NULL             |
+| John is a good boy. | Great. & Better. |
 +---------------------+------------------+
-4 rows in set (0.00 sec)
+3 rows in set (0.00 sec)
 
 --4. Write a query to select all articles which do not have any comments.
 mysql> SELECT content
@@ -219,9 +226,10 @@ mysql> SELECT articles.id, content FROM articles
     -> HAVING COUNT(comments.id)
     -> =
     -> (
-    -> SELECT DISTINCT COUNT(article_id) AS comment_count
+    -> SELECT DISTINCT COUNT(article_id) AS 'max_comment'
     -> FROM comments
     -> GROUP BY article_id
+    -> ORDER BY max_comment DESC
     -> LIMIT 1
     -> );
 +----+---------------------+
@@ -230,7 +238,7 @@ mysql> SELECT articles.id, content FROM articles
 |  1 | John is a good boy. |
 |  3 | He is smart.        |
 +----+---------------------+
-2 rows in set (0.00 sec)
+2 rows in set (0.03 sec)
 
 --6. Write a query to select article which does not have more than one comment by the same user.
 mysql> SELECT articles.id, content
