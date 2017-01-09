@@ -242,7 +242,7 @@ mysql> SELECT articles.id, content FROM articles
 
 --6. Write a query to select article which does not have more than one comment by the same user.
 mysql> SELECT articles.id, content
-    -> FROM articles JOIN comments
+    -> FROM articles LEFT JOIN comments
     -> ON articles.id=comments.article_id
     -> GROUP BY articles.id
     -> HAVING COUNT(comments.user_id) = COUNT(DISTINCT comments.user_id);
@@ -252,11 +252,24 @@ mysql> SELECT articles.id, content
 |  1 | John is a good boy.                |
 |  2 | John plays tennis.                 |
 |  3 | He is smart.                       |
+|  4 | Sherlock lives in london.          |
+|  5 | His address is 221B, Baker St.     |
 |  6 | Watson is his assistant.           |
+|  7 | This is another article.           |
 |  8 | Hi, how are you?                   |
+|  9 | I am good.                         |
 | 10 | What's up?                         |
+| 11 | Where do you live?                 |
+| 12 | I stay in Delhi.                   |
+| 13 | Delhi is in India.                 |
+| 14 | Global warming.                    |
 | 15 | Another Article on Global Warming. |
+| 16 | Hello, This is an article.         |
+| 17 | Article on X.                      |
+| 18 | Article on Y.                      |
+| 19 | Article on ABC.                    |
 | 20 | Article on XYZ.                    |
+| 21 | Hi, this is an article.            |
 +----+------------------------------------+
-8 rows in set (0.05 sec)
+21 rows in set (0.00 sec)
 
