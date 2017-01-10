@@ -199,7 +199,7 @@ mysql> SELECT content, GROUP_CONCAT(text SEPARATOR ' & ') AS 'Comments by User'
 mysql> SELECT content
     -> FROM articles LEFT JOIN comments
     -> ON articles.id = comments.article_id
-    -> WHERE comment IS NULL;
+    -> WHERE text IS NULL;
 +--------------------------------+
 | content                        |
 +--------------------------------+
