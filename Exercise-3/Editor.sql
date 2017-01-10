@@ -226,7 +226,7 @@ mysql> SELECT articles.id, content FROM articles
     -> HAVING COUNT(comments.id)
     -> =
     -> (
-    -> SELECT DISTINCT COUNT(article_id) AS 'max_comment'
+    -> SELECT COUNT(article_id) AS 'max_comment'
     -> FROM comments
     -> GROUP BY article_id
     -> ORDER BY max_comment DESC
